@@ -48,6 +48,8 @@ public class CarGUIJPanel extends JPanel {
     protected void setControlY(int y){
         this.controlY = y;
         // Small oval needs to stay in the larger oval.
+        // Yeah, this will never work. Duh.
+        // New change.
         if (controlY < 5){
             controlY = 5;
         }
