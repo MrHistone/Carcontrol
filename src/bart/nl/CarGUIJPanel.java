@@ -9,11 +9,18 @@ public class CarGUIJPanel extends JPanel {
     private int controlY;
     private int controlSize = 16;
     private int circleSize;
+    private int radiusBigCircle;
+    
+    
     
     @Override
     protected void paintComponent(Graphics g) {
+        if (circleSize == 0){
+            circleSize = getWidth() - 10;
+            radiusBigCircle = circleSize / 2;
+        }
+
         super.paintComponent(g);
-        circleSize = getWidth() - 10;
         g.drawOval(5, 5, circleSize, circleSize);
         g.fillOval(controlX, controlY, controlSize, controlSize);
         
@@ -35,6 +42,13 @@ public class CarGUIJPanel extends JPanel {
     protected void setControlX(int x){
         this.controlX = x;
         // Small oval needs to stay in the larger circle.
+        
+        // Calculate hypotenuse.
+        // If hypotenuse of small circle gets larger with new X than the 
+        // radius of the big circle, do not make X larger (or smaller).
+        
+        
+        
         if (controlX < 5){
             controlX = 5;
         }
@@ -48,8 +62,6 @@ public class CarGUIJPanel extends JPanel {
     protected void setControlY(int y){
         this.controlY = y;
         // Small oval needs to stay in the larger oval.
-        // Yeah, this will never work. Duh.
-        // New change.
         if (controlY < 5){
             controlY = 5;
         }
