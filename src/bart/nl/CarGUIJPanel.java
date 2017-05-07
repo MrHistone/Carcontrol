@@ -42,11 +42,16 @@ public class CarGUIJPanel extends JPanel {
     protected void setControlX(int x){
         this.controlX = x;
         // Small oval needs to stay in the larger circle.
+
+        // Steps:
+        // Get X relative to center of big circle. (Center = 0)
         
-        // Calculate hypotenuse.
-        // If hypotenuse of small circle gets larger with new X than the 
+        // Get Y relative to center of big circle. (Center = 0)
+        
+        // Calculate the hypotenuse with positive values of X and Y.
+        
+        // If hypotenuse gets larger with new X than the 
         // radius of the big circle, do not make X larger (or smaller).
-        
         
         
         if (controlX < 5){
