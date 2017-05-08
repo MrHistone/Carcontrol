@@ -39,18 +39,19 @@ public class CarGUIJPanel extends JPanel {
 
     /**
      * Move the small circle with X and Y.
+     * The circle is bound to the larger, surrounding circle.
      *
      * @param deltaX The amount X needs to change.
      * @param deltaY The amount Y needs to change.
      */
-    public void move(int deltaX, int deltaY) {
+    public void moveXY(int deltaX, int deltaY) {
         // Get X and Y relative to center of big circle. (Center = 0)
         // Take into account the radius of the small circle and tweak a little bit.
         int relativeX = ((Math.max(controlX + deltaX, centerX) - Math.min(controlX + deltaX, centerX)) + (controlSize / 2)) - 2;
         int relativeY = ((Math.max(controlY + deltaY, centerY) - Math.min(controlY + deltaY, centerY)) + (controlSize / 2)) - 2;
-        // Calculate the hypotenuse with positive values of X and Y.
+        // Calculate the hypotenuse.
         double hypotenuse = Math.hypot(relativeX, relativeY);
-        // If hypotenuse gets larger with new X or Y than the radius of the big circle, cancel the action.
+        // If hypotenuse gets larger (with new X and/or Y) than the radius of the big circle, cancel the action.
         if (hypotenuse > radiusBigCircle) {
             // X and/or Y cannot get bigger without getting outside the boundary.
         } else {
@@ -72,6 +73,18 @@ public class CarGUIJPanel extends JPanel {
         }
         controlX = centerX;
         controlY = centerY;
+        repaint();
     }
 
+    public boolean circleInCentre(){
+        if (controlX == centerX && controlY == centerY){
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+    
+    
+    
 }
