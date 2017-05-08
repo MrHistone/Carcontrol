@@ -1,7 +1,10 @@
 package bart.nl;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.Timer;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
@@ -15,7 +18,10 @@ public class StartClient {
     private Controller[] controllers;
     private List<Controller> keyboards = new ArrayList<>();
     private boolean forward = false, backward = false, right = false, left = false;
-    private int speed = 3;
+    private final int speed = 3;
+    private Timer timer;
+    private boolean isMovingToCentre = false, isClockStarted = false;
+    private long timeStart, timeNow;
 
     public static void main(String[] args) {
         new StartClient();
@@ -28,7 +34,6 @@ public class StartClient {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
         carGUIJPanel = window.getBoxPanel();
-
         carGUIJPanel.centerControl();
         attachController();
     }
@@ -53,6 +58,7 @@ public class StartClient {
 
         Thread threadHandleMovement = new Thread(new HandleMovement(), "HandleMovement");
         threadHandleMovement.start();
+
     }
 
     class PollDevices implements Runnable {
@@ -123,36 +129,67 @@ public class StartClient {
         public void run() {
             while (true) {
                 if (forward == true) {
-                    // Is key still pressed?
-                    int y = window.getBoxPanel().getControlY() - speed;
-                    window.getBoxPanel().setControlY(y);
-                    window.getBoxPanel().repaint();
+                    if (isClockStarted || isMovingToCentre) {
+                        isClockStarted = false;
+                        isMovingToCentre = false;
+                    }
+                    window.getBoxPanel().moveXY(0, speed * -1);
                 } else {
 
                 }
 
                 if (backward == true) {
-                    int y = window.getBoxPanel().getControlY() + speed;
-                    window.getBoxPanel().setControlY(y);
-                    window.getBoxPanel().repaint();
+                    if (isClockStarted || isMovingToCentre) {
+                        isClockStarted = false;
+                        isMovingToCentre = false;
+                    }
+                    window.getBoxPanel().moveXY(0, speed);
                 } else {
 
                 }
 
                 if (right == true) {
-                    int x = window.getBoxPanel().getControlX() + speed;
-                    window.getBoxPanel().setControlX(x);
-                    window.getBoxPanel().repaint();
+                    if (isClockStarted || isMovingToCentre) {
+                        isClockStarted = false;
+                        isMovingToCentre = false;
+                    }
+                    window.getBoxPanel().moveXY(speed, 0);
                 } else {
 
                 }
 
                 if (left == true) {
-                    int x = window.getBoxPanel().getControlX() - speed;
-                    window.getBoxPanel().setControlX(x);
-                    window.getBoxPanel().repaint();
+                    if (isClockStarted || isMovingToCentre) {
+                        isClockStarted = false;
+                        isMovingToCentre = false;
+                    }
+                    window.getBoxPanel().moveXY(speed * -1, 0);
                 } else {
 
+                }
+
+                // If all movement is false and circle is not in the middle, 
+                // start moving the circle slowly back to the middle.
+                if (isMovingToCentre == false
+                        && forward == false
+                        && backward == false
+                        && right == false
+                        && left == false
+                        && window.getBoxPanel().circleInCentre() == false) {
+
+                    // Go to centre after a short period of no action.
+                    if (isClockStarted == false) {
+                        // Start the clock
+                        isClockStarted = true;
+                        timeStart = System.currentTimeMillis();
+                    } else {
+                        if ((System.currentTimeMillis() - timeStart) > 500) {
+                            isMovingToCentre = true;
+                            System.out.println("Start the action.");
+                            window.getBoxPanel().centerControl();
+
+                        }
+                    }
                 }
 
                 // Give it some much needed rest...
