@@ -134,8 +134,6 @@ public class StartClient {
                         isMovingToCentre = false;
                     }
                     window.getBoxPanel().moveXY(0, speed * -1);
-                } else {
-
                 }
 
                 if (backward == true) {
@@ -144,9 +142,7 @@ public class StartClient {
                         isMovingToCentre = false;
                     }
                     window.getBoxPanel().moveXY(0, speed);
-                } else {
-
-                }
+                } 
 
                 if (right == true) {
                     if (isClockStarted || isMovingToCentre) {
@@ -154,8 +150,6 @@ public class StartClient {
                         isMovingToCentre = false;
                     }
                     window.getBoxPanel().moveXY(speed, 0);
-                } else {
-
                 }
 
                 if (left == true) {
@@ -164,9 +158,7 @@ public class StartClient {
                         isMovingToCentre = false;
                     }
                     window.getBoxPanel().moveXY(speed * -1, 0);
-                } else {
-
-                }
+                } 
 
                 // If all movement is false and circle is not in the middle, 
                 // start moving the circle slowly back to the middle.
@@ -185,7 +177,6 @@ public class StartClient {
                     } else {
                         if ((System.currentTimeMillis() - timeStart) > 500) {
                             isMovingToCentre = true;
-                            System.out.println("Start the action.");
                             window.getBoxPanel().centerControl();
 
                         }
