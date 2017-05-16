@@ -65,7 +65,7 @@ public class ControlConnection {
         try {
             sOutput.writeObject(str);
         } catch (IOException e) {
-            carGUI.display("Exception writing to server: " + e);
+            carGUI.display("Unable to send a signal to the server: " + e);
         }
     }
 

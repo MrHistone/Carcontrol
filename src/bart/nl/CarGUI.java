@@ -1,8 +1,13 @@
 package bart.nl;
 
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Style;
+import javax.swing.text.StyledDocument;
+
 public class CarGUI extends javax.swing.JFrame {
 
     private ControlConnection connCon;
+    private StyledDocument styledDocument;
 
     /**
      * Creates new form CarGUI
@@ -33,6 +38,7 @@ public class CarGUI extends javax.swing.JFrame {
         //</editor-fold>
 
         initComponents();
+        styledDocument = jTextPaneMessages.getStyledDocument();
     }
 
     /**
@@ -55,7 +61,7 @@ public class CarGUI extends javax.swing.JFrame {
         boxPanel = new CarGUIJPanel();
         messagesPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        jTextPaneMessages = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -142,7 +148,7 @@ public class CarGUI extends javax.swing.JFrame {
 
         messagesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Messages"));
 
-        jScrollPane1.setViewportView(jTextPane1);
+        jScrollPane1.setViewportView(jTextPaneMessages);
 
         javax.swing.GroupLayout messagesPanelLayout = new javax.swing.GroupLayout(messagesPanel);
         messagesPanel.setLayout(messagesPanelLayout);
@@ -213,9 +219,8 @@ public class CarGUI extends javax.swing.JFrame {
             connCon.setConnectParams(ipText.getText(), Integer.valueOf(portText.getText()), this);
             connCon.connect();
         }
-        
-        
-        
+
+
     }//GEN-LAST:event_connectButtonActionPerformed
 
     public static boolean validIP(String ip) {
@@ -246,7 +251,17 @@ public class CarGUI extends javax.swing.JFrame {
     }
 
     public void display(String message) {
+        try {
+            if (styledDocument.getLength() > 0) {
+                message = "\n" + message;
+            }
+            Style s = styledDocument.getStyle("bold");
+            styledDocument.insertString(styledDocument.getLength(), message, s);
 
+            jTextPaneMessages.setCaretPosition(styledDocument.getLength());
+        } catch (BadLocationException e) {
+
+        }
     }
 
     /**
@@ -297,7 +312,7 @@ public class CarGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JTextPane jTextPaneMessages;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JPanel messagesPanel;
     private javax.swing.JPanel movementPanel;

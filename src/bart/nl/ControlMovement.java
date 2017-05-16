@@ -126,6 +126,7 @@ public class ControlMovement {
                         isMovingToCentre = false;
                     }
                     carGUIJPanel.moveXY(0, speed * -1);
+                    
                 }
 
                 if (backward == true) {
