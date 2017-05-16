@@ -2,7 +2,8 @@ package bart.nl;
 
 public class CarGUI extends javax.swing.JFrame {
 
-    
+    private ControlConnection connCon;
+
     /**
      * Creates new form CarGUI
      */
@@ -33,7 +34,6 @@ public class CarGUI extends javax.swing.JFrame {
 
         initComponents();
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -71,6 +71,11 @@ public class CarGUI extends javax.swing.JFrame {
         portText.setText("1500");
 
         connectButton.setText("Connect");
+        connectButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                connectButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout connectionPanelLayout = new javax.swing.GroupLayout(connectionPanel);
         connectionPanel.setLayout(connectionPanelLayout);
@@ -191,6 +196,59 @@ public class CarGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
+        boolean valErr = false;
+        if (!validIP(ipText.getText())) {
+            display("The IP address is invalid.");
+            valErr = true;
+        }
+        try {
+            Integer.valueOf(portText.getText());
+        } catch (NumberFormatException ex) {
+            display("The port number is invalid.");
+            valErr = true;
+        }
+
+        if (!valErr) {
+            connCon.setConnectParams(ipText.getText(), Integer.valueOf(portText.getText()), this);
+            connCon.connect();
+        }
+        
+        
+        
+    }//GEN-LAST:event_connectButtonActionPerformed
+
+    public static boolean validIP(String ip) {
+        try {
+            if (ip == null || ip.isEmpty()) {
+                return false;
+            }
+
+            String[] parts = ip.split("\\.");
+            if (parts.length != 4) {
+                return false;
+            }
+
+            for (String s : parts) {
+                int i = Integer.parseInt(s);
+                if ((i < 0) || (i > 255)) {
+                    return false;
+                }
+            }
+            if (ip.endsWith(".")) {
+                return false;
+            }
+
+            return true;
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+    }
+
+    public void display(String message) {
+
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -246,5 +304,8 @@ public class CarGUI extends javax.swing.JFrame {
     private javax.swing.JTextField portText;
     // End of variables declaration//GEN-END:variables
 
+    void setConConn(ControlConnection conConn) {
+        this.connCon = conConn;
+    }
 
 }
