@@ -59,6 +59,11 @@ public class CarGUI extends javax.swing.JFrame {
         connectButton = new javax.swing.JButton();
         movementPanel = new javax.swing.JPanel();
         boxPanel = new CarGUIJPanel();
+        coordsPanel = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        xLbl = new javax.swing.JLabel();
+        yLbl = new javax.swing.JLabel();
         messagesPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPaneMessages = new javax.swing.JTextPane();
@@ -98,7 +103,7 @@ public class CarGUI extends javax.swing.JFrame {
                 .addComponent(portText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(connectButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(111, Short.MAX_VALUE))
         );
         connectionPanelLayout.setVerticalGroup(
             connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -129,21 +134,64 @@ public class CarGUI extends javax.swing.JFrame {
             .addGap(0, 198, Short.MAX_VALUE)
         );
 
+        coordsPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+
+        jLabel3.setText("x:");
+
+        jLabel4.setText("y:");
+
+        xLbl.setText("0");
+
+        yLbl.setText("0");
+
+        javax.swing.GroupLayout coordsPanelLayout = new javax.swing.GroupLayout(coordsPanel);
+        coordsPanel.setLayout(coordsPanelLayout);
+        coordsPanelLayout.setHorizontalGroup(
+            coordsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(coordsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(coordsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(coordsPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(yLbl))
+                    .addGroup(coordsPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(xLbl)))
+                .addContainerGap(39, Short.MAX_VALUE))
+        );
+        coordsPanelLayout.setVerticalGroup(
+            coordsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(coordsPanelLayout.createSequentialGroup()
+                .addGroup(coordsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(xLbl))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(coordsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(yLbl))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout movementPanelLayout = new javax.swing.GroupLayout(movementPanel);
         movementPanel.setLayout(movementPanelLayout);
         movementPanelLayout.setHorizontalGroup(
             movementPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, movementPanelLayout.createSequentialGroup()
-                .addContainerGap(80, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(boxPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(79, 79, 79))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(coordsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         movementPanelLayout.setVerticalGroup(
             movementPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(movementPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(boxPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(movementPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(boxPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(coordsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 12, Short.MAX_VALUE))
         );
 
         messagesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Messages"));
@@ -182,10 +230,10 @@ public class CarGUI extends javax.swing.JFrame {
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addComponent(connectionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(movementPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(movementPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(messagesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -308,19 +356,34 @@ public class CarGUI extends javax.swing.JFrame {
     private javax.swing.JPanel boxPanel;
     private javax.swing.JButton connectButton;
     private javax.swing.JPanel connectionPanel;
+    private javax.swing.JPanel coordsPanel;
     private javax.swing.JTextField ipText;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextPane jTextPaneMessages;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JPanel messagesPanel;
     private javax.swing.JPanel movementPanel;
     private javax.swing.JTextField portText;
+    private javax.swing.JLabel xLbl;
+    private javax.swing.JLabel yLbl;
     // End of variables declaration//GEN-END:variables
 
     void setConConn(ControlConnection conConn) {
         this.connCon = conConn;
     }
 
+    private class ShowCoordinates implements Runnable{
+        
+        @Override
+        public void run(){
+            
+        }
+    }
+    
+    
+    
 }

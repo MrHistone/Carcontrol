@@ -19,7 +19,7 @@ public class CarGUIJPanel extends JPanel {
     private int centerX, centerY;
     private boolean movingToCenter = false;
     private Color color = Color.RED;
-    private Color colorBigCircle = Color.BLACK;
+    private final Color colorBigCircle = Color.BLACK;
 
     @Override
     protected void paintComponent(Graphics g) {
