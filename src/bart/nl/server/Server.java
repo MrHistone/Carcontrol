@@ -1,30 +1,32 @@
 package bart.nl.server;
 
 import bart.nl.Defaults.CarAction;
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
 
 public class Server {
 
-    // to display time
     private SimpleDateFormat sdf;
-    // the port number to listen for connection
     private int port;
-    // the boolean that will be turned of to stop the server
     private boolean keepGoing;
     private boolean forward = false;
     private CarAction carAction;
     private Car car;
+    private boolean carAvailable;
 
-    public Server(int port) {
+    public Server(int port, boolean carAvailable) {
         // the port
         this.port = port;
-        // to display hh:mm:ss
+        this.carAvailable = carAvailable;
         sdf = new SimpleDateFormat("HH:mm:ss");
-        car = new Car();
-        
+        if (carAvailable){
+            car = new Car();
+        }
     }
 
     public void start() {
@@ -37,7 +39,7 @@ public class Server {
             // infinite loop to wait for connections
             while (keepGoing) {
                 // format message saying we are waiting
-                display("Server waiting for Clients on port " + port + ".");
+                display("The car is waiting for connections on port " + port + ".");
                 Socket socket = serverSocket.accept();  	// accept connection
 
                 // if I was asked to stop
@@ -126,13 +128,6 @@ public class Server {
         System.out.println(time);
     }
 
-    public static void main(String[] args) {
-        int portNumber = 1500;
-        // create a server object and start it
-        Server server = new Server(portNumber);
-        server.start();
-    }
-
     class ClientThread extends Thread {
         // the socket where to listen/talk
 
@@ -175,8 +170,11 @@ public class Server {
                     display(strMsg);
                     writeMsg(strMsg);
                     determineCarAction(strMsg);
-                    initiateCarAction();
-                    
+                    if (carAvailable){
+                        initiateCarAction();
+                    } else {
+                        
+                    }
                 } catch (IOException e) {
                     display("Disconnected...: " + e);
                     break;
