@@ -1,13 +1,14 @@
-package bart.nl;
+package bart.nl.client;
 
+import bart.nl.Defaults;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 
 /**
- * This JPanel is used on the NetBeans controlled UI class CarGUI.
- * It replaces the JPanel boxPanel with a custom creation code.
- * 
+ * This JPanel is used on the NetBeans controlled UI class CarGUI. It replaces
+ * the JPanel boxPanel with a custom creation code.
+ *
  * @author Bart Jansen
  */
 public class CarGUIJPanel extends JPanel {
@@ -20,12 +21,20 @@ public class CarGUIJPanel extends JPanel {
     private boolean movingToCenter = false;
     private Color color = Color.RED;
     private final Color colorBigCircle = Color.BLACK;
+    private Defaults.Coordinates coordinates;
+
+    public CarGUIJPanel() {
+        this.coordinates = new Defaults.Coordinates();
+        coordinates.setXCoordinate(0);
+        coordinates.setYCoordinate(0);
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
         if (circleSize == 0) {
             circleSize = getWidth() - 10;
             radiusBigCircle = circleSize / 2;
+            coordinates.setMaxMovement(radiusBigCircle - (controlSize / 2) );
         }
         g.setColor(colorBigCircle);
         super.paintComponent(g);
@@ -36,8 +45,8 @@ public class CarGUIJPanel extends JPanel {
     }
 
     /**
-     * Move the small circle with X and Y. The circle is restricted to the larger,
-     * surrounding circle.
+     * Move the small circle with X and Y. The circle is restricted to the
+     * larger, surrounding circle.
      *
      * @param deltaX The amount X needs to change.
      * @param deltaY The amount Y needs to change.
@@ -87,10 +96,10 @@ public class CarGUIJPanel extends JPanel {
     }
 
     /**
-     * Checks whether the little circle is in the center.
-     * If it's not and the user did not initiate an action to move it, the class
-     * will slowly move the circle back to the center.
-     * After the movement, the circle is repainted with a red color.
+     * Checks whether the little circle is in the center. If it's not and the
+     * user did not initiate an action to move it, the class will slowly move
+     * the circle back to the center. After the movement, the circle is
+     * repainted with a red color.
      */
     private class MoveCircleSlowlyToCentre implements Runnable {
 
@@ -137,6 +146,14 @@ public class CarGUIJPanel extends JPanel {
             repaint();
         }
 
+    }
+
+    public Defaults.Coordinates getCoordinatesFromCenter() {
+
+        coordinates.setXCoordinate(controlX - centerX);
+        coordinates.setYCoordinate(controlY - centerY);
+
+        return coordinates;
     }
 
 }

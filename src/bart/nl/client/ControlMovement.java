@@ -1,4 +1,4 @@
-package bart.nl;
+package bart.nl.client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,6 @@ import net.java.games.input.EventQueue;
  */
 public class ControlMovement {
 
-   
     private CarGUIJPanel carGUIJPanel;
     private Controller[] controllers;
     private List<Controller> keyboards = new ArrayList<>();
@@ -23,7 +22,7 @@ public class ControlMovement {
     private final int speed = 3;
     private boolean isMovingToCentre = false, isClockStarted = false;
     private long timeStart;
-    
+
     public ControlMovement(CarGUI window) {
         carGUIJPanel = window.getBoxPanel();
         carGUIJPanel.centerControl();
@@ -70,28 +69,28 @@ public class ControlMovement {
                         if (!comp.isAnalog()) {
                             key = (Component.Identifier.Key) comp.getIdentifier();
                             value = event.getValue();
-                            if (key == Component.Identifier.Key.W) {
+                            if (key == Component.Identifier.Key.W || key == Component.Identifier.Key.UP) {
                                 if (value == 1.0f) {
                                     forward = true;
                                 } else {
                                     forward = false;
                                 }
                             }
-                            if (key == Component.Identifier.Key.S) {
+                            if (key == Component.Identifier.Key.S || key == Component.Identifier.Key.DOWN) {
                                 if (value == 1.0f) {
                                     backward = true;
                                 } else {
                                     backward = false;
                                 }
                             }
-                            if (key == Component.Identifier.Key.A) {
+                            if (key == Component.Identifier.Key.A || key == Component.Identifier.Key.LEFT) {
                                 if (value == 1.0f) {
                                     left = true;
                                 } else {
                                     left = false;
                                 }
                             }
-                            if (key == Component.Identifier.Key.D) {
+                            if (key == Component.Identifier.Key.D || key == Component.Identifier.Key.RIGHT) {
                                 if (value == 1.0f) {
                                     right = true;
                                 } else {
@@ -126,7 +125,7 @@ public class ControlMovement {
                         isMovingToCentre = false;
                     }
                     carGUIJPanel.moveXY(0, speed * -1);
-                    
+
                 }
 
                 if (backward == true) {

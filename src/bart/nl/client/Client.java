@@ -1,4 +1,4 @@
-package bart.nl;
+package bart.nl.client;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -7,53 +7,53 @@ import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- *
- * @author Bart Jansen
- */
-public class ControlConnection {
+
+public class Client {
 
     private ObjectInputStream sInput;		// to read from the socket
     private ObjectOutputStream sOutput;		// to write on the socket
     private Socket socket;
-    private CarGUI carGUI;
+    private ClientGUI clientGUI;
     private String server;
     private int port;
-    private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+    private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");;
 
-    public void setConnectParams(String server, int port, CarGUI carGUI) {
-        this.carGUI = carGUI;
+    Client(String server, int port, ClientGUI clientGUI) {
+        // which calls the common constructor with the GUI set to null
         this.server = server;
-        this.port = port;
+        this.port = port;        
+        this.clientGUI = clientGUI;
     }
 
-    public boolean connect() {
+    public boolean start() {
         // try to connect to the server
         try {
             socket = new Socket(server, port);
-            carGUI.display(server);
-        } catch (IOException ec) {
-            carGUI.display("Unable to connect to the car: " + ec);
+        } // if it failed not much I can so
+        catch (Exception ec) {
+            display("Error connectiong to server:" + ec);
             return false;
         }
 
-        carGUI.display("Connection to the car is accepted.");
+        String msg = "Connection accepted " + socket.getInetAddress() + ":" + socket.getPort();
+        display(msg);
 
         /* Creating both Data Stream */
         try {
             sInput = new ObjectInputStream(socket.getInputStream());
             sOutput = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException eIO) {
-            carGUI.display("There was an exception creating new Input/output Streams: " + eIO);
+            display("Exception creating new Input/output Streams: " + eIO);
             return false;
         }
+
         // creates the Thread to listen from the server 
         new ListenFromServer().start();
         try {
             // Server is aan het luisteren, dit is dan het eerste bericht dat hij doorkrijgt.
             sOutput.writeObject("Eerste bericht wat doorkomt.");
         } catch (IOException eIO) {
-            carGUI.display("Exception doing login : " + eIO);
+            display("Exception doing login : " + eIO);
             disconnect();
             return false;
         }
@@ -61,11 +61,15 @@ public class ControlConnection {
         return true;
     }
 
+    private void display(String msg) {
+        System.out.println(msg);
+    }
+
     void sendMessage(String str) {
         try {
             sOutput.writeObject(str);
         } catch (IOException e) {
-            carGUI.display("Unable to send a signal to the server: " + e);
+            display("Exception writing to server: " + e);
         }
     }
 
@@ -79,21 +83,24 @@ public class ControlConnection {
                 sInput.close();
             }
         } catch (Exception e) {
-        } 
+        } // not much else I can do
         try {
             if (sOutput != null) {
                 sOutput.close();
             }
         } catch (Exception e) {
-        } 
+        } // not much else I can do
         try {
             if (socket != null) {
                 socket.close();
             }
         } catch (Exception e) {
-        } 
+        } // not much else I can do
 
-        carGUI.display("Disconnected.");
+        // inform the GUI
+        if (clientGUI != null) {
+        }
+
     }
 
     class ListenFromServer extends Thread {
@@ -103,17 +110,24 @@ public class ControlConnection {
                 try {
                     // Programma luistert totdat er iets binnenkomt. Dan gaat hij pas verder.
                     String msg = (String) sInput.readObject();
-                    // Geef het bericht door aan de GUI.
-                    String time = sdf.format(new Date()) + " " + msg;
-                    carGUI.display(time);
+                    // if console mode print the message and add back the prompt
+                    if (clientGUI == null) {
+                        System.out.println(msg);
+                        System.out.print("> ");
+                    } else {
+                        // Geef het bericht door aan de GUI.
+                        String time = sdf.format(new Date()) + " " + msg;
+                        clientGUI.showServerMessage(time);
+                    }
                 } catch (IOException e) {
-                    carGUI.display("Server has close the connection: " + e);
+                    display("Server has close the connection: " + e);
+                    if (clientGUI != null) {
+                    }
                     break;
-                } catch (ClassNotFoundException ex) {
-                    carGUI.display("ClassNotFoundException: " + ex);
+                } // can't happen with a String object but need the catch anyhow
+                catch (ClassNotFoundException e2) {
                 }
             }
         }
     }
-
 }

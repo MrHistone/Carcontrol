@@ -1,4 +1,4 @@
-package bart.nl;
+package bart.nl.server;
 
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;

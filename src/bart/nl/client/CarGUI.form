@@ -86,7 +86,7 @@
                       <Component id="portText" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="connectButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="111" max="32767" attributes="0"/>
+                      <EmptySpace pref="147" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -150,10 +150,13 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="78" max="32767" attributes="0"/>
                       <Component id="boxPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="coordsPanel" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="coordsPanel" max="32767" attributes="0"/>
+                          <Component id="percentagePanel" max="32767" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -163,7 +166,11 @@
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="boxPanel" min="-2" max="-2" attributes="0"/>
-                          <Component id="coordsPanel" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="coordsPanel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="percentagePanel" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace min="0" pref="12" max="32767" attributes="0"/>
                   </Group>
@@ -212,20 +219,17 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="yLbl" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="xLbl" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                          <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="xLabel" min="-2" max="-2" attributes="0"/>
+                              <Component id="yLabel" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="39" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="yValue" pref="30" max="32767" attributes="0"/>
+                              <Component id="xValue" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -233,13 +237,13 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="xLbl" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="xLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="xValue" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="yLbl" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="yLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="yValue" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -247,23 +251,94 @@
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabel3">
+                <Component class="javax.swing.JLabel" name="xLabel">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="x:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jLabel4">
+                <Component class="javax.swing.JLabel" name="yLabel">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="y:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="xLbl">
+                <Component class="javax.swing.JLabel" name="xValue">
                   <Properties>
+                    <Property name="horizontalAlignment" type="int" value="4"/>
                     <Property name="text" type="java.lang.String" value="0"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="yLbl">
+                <Component class="javax.swing.JLabel" name="yValue">
                   <Properties>
+                    <Property name="horizontalAlignment" type="int" value="4"/>
+                    <Property name="text" type="java.lang.String" value="0"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Container class="javax.swing.JPanel" name="percentagePanel">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                    <LineBorder roundedCorners="true"/>
+                  </Border>
+                </Property>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="yPercLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                              <Component id="xPercLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="yPercValue" pref="30" max="32767" attributes="0"/>
+                              <Component id="xPercValue" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace pref="36" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="xPercLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="xPercValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="yPercLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="yPercValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JLabel" name="xPercLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="%x:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="yPercLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="%y:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="xPercValue">
+                  <Properties>
+                    <Property name="horizontalAlignment" type="int" value="4"/>
+                    <Property name="text" type="java.lang.String" value="0"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="yPercValue">
+                  <Properties>
+                    <Property name="horizontalAlignment" type="int" value="4"/>
                     <Property name="text" type="java.lang.String" value="0"/>
                   </Properties>
                 </Component>

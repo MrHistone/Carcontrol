@@ -1,4 +1,4 @@
-package bart.nl;
+package bart.nl.client;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
@@ -39,6 +39,9 @@ public class CarGUI extends javax.swing.JFrame {
 
         initComponents();
         styledDocument = jTextPaneMessages.getStyledDocument();
+        Thread threadShowCoordinates = new Thread(new ShowCoordinates());
+        threadShowCoordinates.setName("ShowCoordinates");
+        threadShowCoordinates.start();
     }
 
     /**
@@ -60,10 +63,15 @@ public class CarGUI extends javax.swing.JFrame {
         movementPanel = new javax.swing.JPanel();
         boxPanel = new CarGUIJPanel();
         coordsPanel = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        xLbl = new javax.swing.JLabel();
-        yLbl = new javax.swing.JLabel();
+        xLabel = new javax.swing.JLabel();
+        yLabel = new javax.swing.JLabel();
+        xValue = new javax.swing.JLabel();
+        yValue = new javax.swing.JLabel();
+        percentagePanel = new javax.swing.JPanel();
+        xPercLabel = new javax.swing.JLabel();
+        yPercLabel = new javax.swing.JLabel();
+        xPercValue = new javax.swing.JLabel();
+        yPercValue = new javax.swing.JLabel();
         messagesPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPaneMessages = new javax.swing.JTextPane();
@@ -103,7 +111,7 @@ public class CarGUI extends javax.swing.JFrame {
                 .addComponent(portText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(connectButton)
-                .addContainerGap(111, Short.MAX_VALUE))
+                .addContainerGap(147, Short.MAX_VALUE))
         );
         connectionPanelLayout.setVerticalGroup(
             connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -136,41 +144,81 @@ public class CarGUI extends javax.swing.JFrame {
 
         coordsPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
-        jLabel3.setText("x:");
+        xLabel.setText("x:");
 
-        jLabel4.setText("y:");
+        yLabel.setText("y:");
 
-        xLbl.setText("0");
+        xValue.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        xValue.setText("0");
 
-        yLbl.setText("0");
+        yValue.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        yValue.setText("0");
 
         javax.swing.GroupLayout coordsPanelLayout = new javax.swing.GroupLayout(coordsPanel);
         coordsPanel.setLayout(coordsPanelLayout);
         coordsPanelLayout.setHorizontalGroup(
             coordsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(coordsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(coordsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(coordsPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(yLbl))
-                    .addGroup(coordsPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(xLbl)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addGap(20, 20, 20)
+                .addGroup(coordsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(xLabel)
+                    .addComponent(yLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(coordsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(yValue, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addComponent(xValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         coordsPanelLayout.setVerticalGroup(
             coordsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(coordsPanelLayout.createSequentialGroup()
                 .addGroup(coordsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(xLbl))
+                    .addComponent(xLabel)
+                    .addComponent(xValue))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(coordsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(yLbl))
+                    .addComponent(yLabel)
+                    .addComponent(yValue))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        percentagePanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+
+        xPercLabel.setText("%x:");
+
+        yPercLabel.setText("%y:");
+
+        xPercValue.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        xPercValue.setText("0");
+
+        yPercValue.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        yPercValue.setText("0");
+
+        javax.swing.GroupLayout percentagePanelLayout = new javax.swing.GroupLayout(percentagePanel);
+        percentagePanel.setLayout(percentagePanelLayout);
+        percentagePanelLayout.setHorizontalGroup(
+            percentagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(percentagePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(percentagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(yPercLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(xPercLabel, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(percentagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(yPercValue, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addComponent(xPercValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
+        );
+        percentagePanelLayout.setVerticalGroup(
+            percentagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(percentagePanelLayout.createSequentialGroup()
+                .addGroup(percentagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(xPercLabel)
+                    .addComponent(xPercValue))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(percentagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(yPercLabel)
+                    .addComponent(yPercValue))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -179,10 +227,12 @@ public class CarGUI extends javax.swing.JFrame {
         movementPanelLayout.setHorizontalGroup(
             movementPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, movementPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(78, Short.MAX_VALUE)
                 .addComponent(boxPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(coordsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(movementPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(coordsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(percentagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         movementPanelLayout.setVerticalGroup(
@@ -190,7 +240,10 @@ public class CarGUI extends javax.swing.JFrame {
             .addGroup(movementPanelLayout.createSequentialGroup()
                 .addGroup(movementPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(boxPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(coordsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(movementPanelLayout.createSequentialGroup()
+                        .addComponent(coordsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(percentagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 12, Short.MAX_VALUE))
         );
 
@@ -360,30 +413,46 @@ public class CarGUI extends javax.swing.JFrame {
     private javax.swing.JTextField ipText;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextPane jTextPaneMessages;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JPanel messagesPanel;
     private javax.swing.JPanel movementPanel;
+    private javax.swing.JPanel percentagePanel;
     private javax.swing.JTextField portText;
-    private javax.swing.JLabel xLbl;
-    private javax.swing.JLabel yLbl;
+    private javax.swing.JLabel xLabel;
+    private javax.swing.JLabel xPercLabel;
+    private javax.swing.JLabel xPercValue;
+    private javax.swing.JLabel xValue;
+    private javax.swing.JLabel yLabel;
+    private javax.swing.JLabel yPercLabel;
+    private javax.swing.JLabel yPercValue;
+    private javax.swing.JLabel yValue;
     // End of variables declaration//GEN-END:variables
 
     void setConConn(ControlConnection conConn) {
         this.connCon = conConn;
     }
 
-    private class ShowCoordinates implements Runnable{
-        
+    private class ShowCoordinates implements Runnable {
+
         @Override
-        public void run(){
-            
+        public void run() {
+            while (true) {
+                xValue.setText(String.valueOf(((CarGUIJPanel) boxPanel).getCoordinatesFromCenter().getXCoordinate()));
+                yValue.setText(String.valueOf(((CarGUIJPanel) boxPanel).getCoordinatesFromCenter().getYCoordinate()));
+
+                xPercValue.setText(String.valueOf((int) ((CarGUIJPanel) boxPanel).getCoordinatesFromCenter().getXPercentage()));
+                yPercValue.setText(String.valueOf((int) ((CarGUIJPanel) boxPanel).getCoordinatesFromCenter().getYPercentage()));
+
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException ex) {
+
+                }
+
+            }
         }
     }
-    
-    
-    
+
 }

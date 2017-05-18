@@ -1,4 +1,4 @@
-package bart.nl;
+package bart.nl.client;
 
 public class StartClient {
 

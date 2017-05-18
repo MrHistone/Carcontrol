@@ -1,4 +1,4 @@
-package bart.nl;
+package bart.nl.server;
 
 import bart.nl.Defaults.CarAction;
 import java.io.*;

@@ -1,5 +1,6 @@
-package bart.nl;
+package bart.nl.client;
 
+import bart.nl.Defaults;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.KeyEventDispatcher;
