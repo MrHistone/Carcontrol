@@ -6,7 +6,7 @@ import javax.swing.text.StyledDocument;
 
 public class CarGUI extends javax.swing.JFrame {
 
-    private ControlConnection connCon;
+    private ControlConnection controlConnection;
     private StyledDocument styledDocument;
 
     /**
@@ -317,8 +317,8 @@ public class CarGUI extends javax.swing.JFrame {
         }
 
         if (!valErr) {
-            connCon.setConnectParams(ipText.getText(), Integer.valueOf(portText.getText()), this);
-            connCon.connect();
+            controlConnection.setConnectParams(ipText.getText(), Integer.valueOf(portText.getText()), this);
+            controlConnection.connect();
         }
 
 
@@ -431,7 +431,7 @@ public class CarGUI extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     void setConConn(ControlConnection conConn) {
-        this.connCon = conConn;
+        this.controlConnection = conConn;
     }
 
     private class ShowCoordinates implements Runnable {

@@ -4,6 +4,7 @@ import bart.nl.Defaults.CarAction;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -13,7 +14,6 @@ public class Server {
 
     private SimpleDateFormat sdf;
     private int port;
-    private boolean keepGoing;
     private boolean forward = false;
     private CarAction carAction;
     private Car car;
@@ -24,37 +24,25 @@ public class Server {
         this.port = port;
         this.carAvailable = carAvailable;
         sdf = new SimpleDateFormat("HH:mm:ss");
-        if (carAvailable){
+        if (carAvailable) {
             car = new Car();
         }
     }
 
     public void start() {
-        keepGoing = true;
         /* create socket server and wait for connection requests */
         try {
             // the socket used by the server
             ServerSocket serverSocket = new ServerSocket(port);
 
-            // infinite loop to wait for connections
-            while (keepGoing) {
-                // format message saying we are waiting
-                display("The car is waiting for connections on port " + port + ".");
-                Socket socket = serverSocket.accept();  	// accept connection
+            // format message saying we are waiting
+            display("The car is waiting for connections on port " + port + ".");
+            display("The IP-address is: " + Inet4Address.getLocalHost().getHostAddress());
+            Socket socket = serverSocket.accept();  	// accept connection
 
-                // if I was asked to stop
-                if (!keepGoing) {
-                    break;
-                }
-                ClientThread t = new ClientThread(socket);  // make a thread of it
-                t.start();
-            }
-            // I was asked to stop
-            try {
-                serverSocket.close();
-            } catch (Exception e) {
-                display("Exception closing the server and clients: " + e);
-            }
+            ClientThread t = new ClientThread(socket);  // make a thread of it
+            t.start();
+
         } // something went bad
         catch (IOException e) {
             String msg = sdf.format(new Date()) + " Exception on new ServerSocket: " + e + "\n";
@@ -66,7 +54,6 @@ public class Server {
      * For the GUI to stop the server
      */
     protected void stop() {
-        keepGoing = false;
         try {
             new Socket("localhost", port);
         } catch (Exception e) {
@@ -96,12 +83,12 @@ public class Server {
                 break;
             default:
                 carAction = CarAction.STOP;
-                
+
         }
     }
-    
-    private void initiateCarAction(){
-        switch (carAction){
+
+    private void initiateCarAction() {
+        switch (carAction) {
             case BACKWARD:
                 car.moveCar(carAction, 100);
                 break;
@@ -121,7 +108,6 @@ public class Server {
                 break;
         }
     }
-    
 
     private void display(String msg) {
         String time = sdf.format(new Date()) + " " + msg;
@@ -134,8 +120,6 @@ public class Server {
         Socket socket;
         ObjectInputStream sInput;
         ObjectOutputStream sOutput;
-        // my unique id (easier for deconnection)
-        int id;
         String strMsg;
 
         // the date I connect
@@ -150,8 +134,7 @@ public class Server {
                 // create output first
                 sOutput = new ObjectOutputStream(socket.getOutputStream());
                 sInput = new ObjectInputStream(socket.getInputStream());
-                // read the username
-                display("connected.");
+                
             } catch (IOException e) {
                 display("Exception creating new Input/output Streams: " + e);
                 return;
@@ -170,10 +153,10 @@ public class Server {
                     display(strMsg);
                     writeMsg(strMsg);
                     determineCarAction(strMsg);
-                    if (carAvailable){
+                    if (carAvailable) {
                         initiateCarAction();
                     } else {
-                        
+
                     }
                 } catch (IOException e) {
                     display("Disconnected...: " + e);
@@ -220,7 +203,7 @@ public class Server {
             // write the message to the stream
             try {
                 sOutput.writeObject(msg);
-            } // if an error occurs, do not abort just inform the user
+            } 
             catch (IOException e) {
                 display("Error sending message");
                 display(e.toString());

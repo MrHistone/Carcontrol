@@ -49,14 +49,9 @@ public class ControlConnection {
         }
         // creates the Thread to listen from the server 
         new ListenFromServer().start();
-        try {
-            // Server is aan het luisteren, dit is dan het eerste bericht dat hij doorkrijgt.
-            sOutput.writeObject("Eerste bericht wat doorkomt.");
-        } catch (IOException eIO) {
-            carGUI.display("Exception doing login : " + eIO);
-            disconnect();
-            return false;
-        }
+        
+        sendMessage("Client controls connected to the car.");
+        
         // success we inform the caller that it worked
         return true;
     }
@@ -65,7 +60,7 @@ public class ControlConnection {
         try {
             sOutput.writeObject(str);
         } catch (IOException e) {
-            carGUI.display("Unable to send a signal to the server: " + e);
+            carGUI.display("The client controls are no longer connected to the car. " + e);
         }
     }
 
@@ -79,29 +74,29 @@ public class ControlConnection {
                 sInput.close();
             }
         } catch (Exception e) {
-        } 
+        }
         try {
             if (sOutput != null) {
                 sOutput.close();
             }
         } catch (Exception e) {
-        } 
+        }
         try {
             if (socket != null) {
                 socket.close();
             }
         } catch (Exception e) {
-        } 
+        }
 
         carGUI.display("Disconnected.");
     }
 
     class ListenFromServer extends Thread {
 
+        @Override
         public void run() {
             while (true) {
-                try {
-                    // Programma luistert totdat er iets binnenkomt. Dan gaat hij pas verder.
+                try {                   
                     String msg = (String) sInput.readObject();
                     // Geef het bericht door aan de GUI.
                     String time = sdf.format(new Date()) + " " + msg;
