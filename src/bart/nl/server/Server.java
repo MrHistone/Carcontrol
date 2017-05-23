@@ -134,7 +134,7 @@ public class Server {
                 // create output first
                 sOutput = new ObjectOutputStream(socket.getOutputStream());
                 sInput = new ObjectInputStream(socket.getInputStream());
-                
+
             } catch (IOException e) {
                 display("Exception creating new Input/output Streams: " + e);
                 return;
@@ -142,12 +142,9 @@ public class Server {
             date = new Date().toString() + "\n";
         }
 
-        // what will run forever
         public void run() {
-            // to loop until LOGOUT
             boolean keepGoing = true;
             while (keepGoing) {
-                // read a String (which is an object)
                 try {
                     strMsg = (String) sInput.readObject();
                     display(strMsg);
@@ -203,8 +200,7 @@ public class Server {
             // write the message to the stream
             try {
                 sOutput.writeObject(msg);
-            } 
-            catch (IOException e) {
+            } catch (IOException e) {
                 display("Error sending message");
                 display(e.toString());
             }
