@@ -1,5 +1,7 @@
 package bart.nl;
 
+import java.io.Serializable;
+
 public class Defaults {
 
     public enum Momentum {
@@ -10,13 +12,14 @@ public class Defaults {
         FORWARD, BACKWARD, RIGHT, LEFT, STOP, HORN
     }
 
-    public static class Coordinates {
+    public static class Coordinates implements Serializable{
 
         private int xCoordinate = 0;
         private int yCoordinate = 0;
         private double maxMovement = 0;
         private double xPercentage = 0;
         private double yPercentage = 0;
+        private String message;
 
         public int getXCoordinate() {
             return xCoordinate;
@@ -60,6 +63,18 @@ public class Defaults {
             this.maxMovement = maxMovement;
         }
 
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        
+        
+        
+        
     }
 
 }

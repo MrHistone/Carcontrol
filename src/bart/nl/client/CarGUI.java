@@ -1,5 +1,6 @@
 package bart.nl.client;
 
+import bart.nl.Defaults.Coordinates;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyledDocument;
@@ -8,7 +9,7 @@ public class CarGUI extends javax.swing.JFrame {
 
     private ControlConnection controlConnection;
     private StyledDocument styledDocument;
-
+    private Coordinates coordinates;
     /**
      * Creates new form CarGUI
      */
@@ -39,7 +40,7 @@ public class CarGUI extends javax.swing.JFrame {
 
         initComponents();
         styledDocument = jTextPaneMessages.getStyledDocument();
-        Thread threadShowCoordinates = new Thread(new ShowCoordinates());
+        Thread threadShowCoordinates = new Thread(new ProcessCoordinates());
         threadShowCoordinates.setName("ShowCoordinates");
         threadShowCoordinates.start();
     }
@@ -434,17 +435,24 @@ public class CarGUI extends javax.swing.JFrame {
         this.controlConnection = conConn;
     }
 
-    private class ShowCoordinates implements Runnable {
+    private class ProcessCoordinates implements Runnable {
 
+        
+        
         @Override
         public void run() {
             while (true) {
-                xValue.setText(String.valueOf(((CarGUIJPanel) boxPanel).getCoordinatesFromCenter().getXCoordinate()));
-                yValue.setText(String.valueOf(((CarGUIJPanel) boxPanel).getCoordinatesFromCenter().getYCoordinate()));
+                coordinates = ((CarGUIJPanel) boxPanel).getCoordinatesFromCenter();
+                xValue.setText(String.valueOf(coordinates.getXCoordinate()));
+                yValue.setText(String.valueOf(coordinates.getYCoordinate()));
 
-                xPercValue.setText(String.valueOf((int) ((CarGUIJPanel) boxPanel).getCoordinatesFromCenter().getXPercentage()));
-                yPercValue.setText(String.valueOf((int) ((CarGUIJPanel) boxPanel).getCoordinatesFromCenter().getYPercentage()));
-
+                xPercValue.setText(String.valueOf((int) coordinates.getXPercentage()));
+                yPercValue.setText(String.valueOf((int) coordinates.getYPercentage()));
+                
+                // Send the coordinates to the car
+                coordinates.setMessage("");
+                controlConnection.sendCoordinates(coordinates);
+                
                 try {
                     Thread.sleep(20);
                 } catch (InterruptedException ex) {

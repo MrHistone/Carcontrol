@@ -1,5 +1,6 @@
 package bart.nl.client;
 
+import bart.nl.Defaults.Coordinates;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -56,14 +57,24 @@ public class ControlConnection {
         return true;
     }
 
-    void sendMessage(String str) {
+    public void sendCoordinates(Coordinates co) {
+        try {
+            sOutput.writeObject(co);
+        } catch (IOException e) {
+            carGUI.display("The client controls are no longer connected to the car. " + e);
+        }
+    }
+
+    
+    public void sendMessage(String str){
         try {
             sOutput.writeObject(str);
         } catch (IOException e) {
             carGUI.display("The client controls are no longer connected to the car. " + e);
         }
     }
-
+    
+    
     /*
      * When something goes wrong
      * Close the Input/Output streams and disconnect not much to do in the catch clause

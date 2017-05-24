@@ -1,6 +1,7 @@
 package bart.nl.server;
 
 import bart.nl.Defaults.CarAction;
+import bart.nl.Defaults.Coordinates;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -18,6 +19,7 @@ public class Server {
     private CarAction carAction;
     private Car car;
     private boolean carAvailable;
+    private Coordinates coordinates;
 
     public Server(int port, boolean carAvailable) {
         // the port
@@ -115,8 +117,8 @@ public class Server {
     }
 
     class ClientThread extends Thread {
-        // the socket where to listen/talk
 
+        boolean keepGoing = true;
         Socket socket;
         ObjectInputStream sInput;
         ObjectOutputStream sOutput;
@@ -143,26 +145,32 @@ public class Server {
         }
 
         public void run() {
-            boolean keepGoing = true;
             while (keepGoing) {
-                try {
-                    strMsg = (String) sInput.readObject();
-                    display(strMsg);
-                    writeMsg(strMsg);
-                    determineCarAction(strMsg);
-                    if (carAvailable) {
-                        initiateCarAction();
-                    } else {
-
-                    }
-                } catch (IOException e) {
-                    display("Disconnected...: " + e);
-                    break;
-                } catch (ClassNotFoundException e2) {
-                    break;
-                }
+                receiveObject();
             }
             close();
+        }
+
+        private void receiveObject() {
+            try {
+                coordinates = (Coordinates) sInput.readObject();
+                strMsg = (String) sInput.readObject();
+                display(strMsg);
+                writeMsg(strMsg);
+                determineCarAction(strMsg);
+                if (carAvailable) {
+                    initiateCarAction();
+                } else {
+
+                }
+            } catch (ClassCastException ex) {
+                display("Object received cannot be cast to an instance of class Coordinates. " + ex);
+            } catch (IOException e) {
+                display("Disconnected...: " + e);
+                keepGoing = false;
+            } catch (ClassNotFoundException e2) {
+                keepGoing = false;
+            }
         }
 
         // try to close everything
