@@ -436,8 +436,6 @@ public class CarGUI extends javax.swing.JFrame {
     }
 
     private class ProcessCoordinates implements Runnable {
-
-        
         
         @Override
         public void run() {
@@ -451,8 +449,9 @@ public class CarGUI extends javax.swing.JFrame {
                 
                 // Send the coordinates to the car
                 coordinates.setMessage("");
-                controlConnection.sendCoordinates(coordinates);
-                
+                if (!(controlConnection == null)){
+                    controlConnection.sendCoordinates(coordinates);
+                }
                 try {
                     Thread.sleep(20);
                 } catch (InterruptedException ex) {
