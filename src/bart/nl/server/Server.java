@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -20,6 +21,7 @@ public class Server {
     private Car car;
     private boolean carAvailable;
     private Coordinates coordinates;
+    private DecimalFormat df = new DecimalFormat("#"); 
 
     public Server(int port, boolean carAvailable) {
         // the port
@@ -154,22 +156,19 @@ public class Server {
         private void receiveObject() {
             try {
                 coordinates = (Coordinates) sInput.readObject();
-                
-                if (coordinates.getXCoordinate() != 0) {
-                    display("MaxMovement: "
-                            + coordinates.getMaxMovement()
-                            + "\tX%: "
-                            + coordinates.getXPercentage()
+                if (coordinates.getXCoordinate() != 0 || coordinates.getYCoordinate() != 0) {
+                    display("X%: "
+                            + df.format(coordinates.getXPercentage())
                             + "\tY%: "
-                            + coordinates.getYPercentage()
-                            + "\t\tX: "
-                            + coordinates.getXCoordinate()
+                            + df.format(coordinates.getYPercentage())
+                            + "\tX: "
+                            + df.format(coordinates.getXCoordinate())
                             + "\tY: "
-                            + coordinates.getYCoordinate()
-                            + "\t\t" + coordinates.getMessage());
+                            + df.format(coordinates.getYCoordinate())
+                            + "\t" + coordinates.getMessage());
                 }
-                
-                if (coordinates.getMessage() != null && coordinates.getMessage() != ""){
+
+                if (coordinates.getMessage() != null && coordinates.getMessage() != "") {
                     display(coordinates.getMessage());
                 }
 

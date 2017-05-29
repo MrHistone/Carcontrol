@@ -20,7 +20,20 @@ public class Defaults {
         private double xPercentage = 0;
         private double yPercentage = 0;
         private String message;
+        private String xCoordinateString;
+        private String yCoordinateString;
 
+        public Coordinates(int xCoordinate, int yCoordinate, double maxMovement, String message){
+            this.xCoordinate = xCoordinate;
+            this.yCoordinate = yCoordinate;
+            this.maxMovement = maxMovement;
+            this.message = message;
+        }
+            
+        public Coordinates(){
+            
+        }
+        
         public int getXCoordinate() {
             return xCoordinate;
         }
@@ -69,6 +82,22 @@ public class Defaults {
 
         public void setMessage(String message) {
             this.message = message;
+        }
+
+        public String getxCoordinateString() {
+            return xCoordinateString;
+        }
+
+        public void setxCoordinateString(String xCoordinateString) {
+            this.xCoordinateString = xCoordinateString;
+        }
+
+        public String getyCoordinateString() {
+            return yCoordinateString;
+        }
+
+        public void setyCoordinateString(String yCoordinateString) {
+            this.yCoordinateString = yCoordinateString;
         }
 
         

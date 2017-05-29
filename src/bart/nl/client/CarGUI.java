@@ -83,7 +83,7 @@ public class CarGUI extends javax.swing.JFrame {
 
         connectionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Connection"));
 
-        ipText.setText("172.16.0.33");
+        ipText.setText("192.168.2.4");
 
         jLabel1.setText("IP:");
 
@@ -449,9 +449,13 @@ public class CarGUI extends javax.swing.JFrame {
                 yPercValue.setText(String.valueOf((int) coordinates.getYPercentage()));
 
                 // Send the coordinates to the car
+                // To send an object through the socket, a new object has to be made.
                 if (controlConnection != null && controlConnection.isConnected == true) {
-                    coordinates.setMessage("Coordinates Send.");
-                    controlConnection.sendCoordinates(coordinates);
+                    controlConnection.sendCoordinates(new Coordinates(
+                            coordinates.getXCoordinate(), 
+                            coordinates.getYCoordinate(), 
+                            coordinates.getMaxMovement(), 
+                            coordinates.getMessage()));
                 }
 
                 try {
