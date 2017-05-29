@@ -21,6 +21,7 @@ public class ControlConnection {
     private String server;
     private int port;
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+    public boolean isConnected = false;
 
     public void setConnectParams(String server, int port, CarGUI carGUI) {
         this.carGUI = carGUI;
@@ -52,6 +53,7 @@ public class ControlConnection {
         new ListenFromServer().start();
         
         sendMessage("Client controls connected to the car.");
+        isConnected = true;
         
         // success we inform the caller that it worked
         return true;

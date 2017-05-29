@@ -154,15 +154,33 @@ public class Server {
         private void receiveObject() {
             try {
                 coordinates = (Coordinates) sInput.readObject();
-                strMsg = (String) sInput.readObject();
-                display(strMsg);
-                writeMsg(strMsg);
-                determineCarAction(strMsg);
-                if (carAvailable) {
-                    initiateCarAction();
-                } else {
-
+                
+                if (coordinates.getXCoordinate() != 0) {
+                    display("MaxMovement: "
+                            + coordinates.getMaxMovement()
+                            + "\tX%: "
+                            + coordinates.getXPercentage()
+                            + "\tY%: "
+                            + coordinates.getYPercentage()
+                            + "\t\tX: "
+                            + coordinates.getXCoordinate()
+                            + "\tY: "
+                            + coordinates.getYCoordinate()
+                            + "\t\t" + coordinates.getMessage());
                 }
+                
+                if (coordinates.getMessage() != null && coordinates.getMessage() != ""){
+                    display(coordinates.getMessage());
+                }
+
+//                display("Coordinates received.");
+//                writeMsg("Coordinates received.");
+//                determineCarAction(strMsg);
+//                if (carAvailable) {
+//                    initiateCarAction();
+//                } else {
+//
+//                }
             } catch (ClassCastException ex) {
                 display("Object received cannot be cast to an instance of class Coordinates. " + ex);
             } catch (IOException e) {

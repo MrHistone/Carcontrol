@@ -10,6 +10,7 @@ public class CarGUI extends javax.swing.JFrame {
     private ControlConnection controlConnection;
     private StyledDocument styledDocument;
     private Coordinates coordinates;
+
     /**
      * Creates new form CarGUI
      */
@@ -82,7 +83,7 @@ public class CarGUI extends javax.swing.JFrame {
 
         connectionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Connection"));
 
-        ipText.setText("192.168.2.12");
+        ipText.setText("172.16.0.33");
 
         jLabel1.setText("IP:");
 
@@ -437,8 +438,6 @@ public class CarGUI extends javax.swing.JFrame {
 
     private class ProcessCoordinates implements Runnable {
 
-        
-        
         @Override
         public void run() {
             while (true) {
@@ -448,11 +447,13 @@ public class CarGUI extends javax.swing.JFrame {
 
                 xPercValue.setText(String.valueOf((int) coordinates.getXPercentage()));
                 yPercValue.setText(String.valueOf((int) coordinates.getYPercentage()));
-                
+
                 // Send the coordinates to the car
-                coordinates.setMessage("");
-                controlConnection.sendCoordinates(coordinates);
-                
+                if (controlConnection != null && controlConnection.isConnected == true) {
+                    coordinates.setMessage("Coordinates Send.");
+                    controlConnection.sendCoordinates(coordinates);
+                }
+
                 try {
                     Thread.sleep(20);
                 } catch (InterruptedException ex) {
