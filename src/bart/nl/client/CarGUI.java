@@ -437,7 +437,7 @@ public class CarGUI extends javax.swing.JFrame {
     }
 
     private class ProcessCoordinates implements Runnable {
-
+        
         @Override
         public void run() {
             while (true) {
