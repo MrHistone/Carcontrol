@@ -12,7 +12,10 @@ public class Defaults {
         FORWARD, BACKWARD, RIGHT, LEFT, STOP, HORN
     }
 
-    public static class Coordinates implements Serializable{
+    /**
+     * Class used to send coordinates to the connected car.
+     */
+    public static class Coordinates implements Serializable {
 
         private int xCoordinate = 0;
         private int yCoordinate = 0;
@@ -23,17 +26,27 @@ public class Defaults {
         private String xCoordinateString;
         private String yCoordinateString;
 
-        public Coordinates(int xCoordinate, int yCoordinate, double maxMovement, String message){
+        /**
+         * Constructor used to create a new instance with all necessary instance variables.
+         * @param xCoordinate int X Coordinate
+         * @param yCoordinate int Y Coordinate
+         * @param maxMovement double Maximum movement
+         * @param message String Message
+         */
+        public Coordinates(int xCoordinate, int yCoordinate, double maxMovement, String message) {
             this.xCoordinate = xCoordinate;
             this.yCoordinate = yCoordinate;
             this.maxMovement = maxMovement;
             this.message = message;
         }
-            
-        public Coordinates(){
-            
+
+        /**
+         * Default constructor.
+         */
+        public Coordinates() {
+
         }
-        
+
         public int getXCoordinate() {
             return xCoordinate;
         }
@@ -100,10 +113,6 @@ public class Defaults {
             this.yCoordinateString = yCoordinateString;
         }
 
-        
-        
-        
-        
     }
 
 }

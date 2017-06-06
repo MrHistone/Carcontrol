@@ -4,6 +4,11 @@ package bart.nl.server;
  * Start Server with commandline:
  * java -cp carcontrol.jar bart.nl.server.StartServer 1
  * The parameter is to test without a RaspBerry PI attached.
+ * 
+ * With the -cp argument you provide the classpath i.e. path(s) to additional 
+ * classes or libraries that your program may require when being compiled or run. 
+ * With -jar you specify the executable JAR file that you want to run.
+ * 
  * @author Bart Jansen
  */
 public class StartServer {

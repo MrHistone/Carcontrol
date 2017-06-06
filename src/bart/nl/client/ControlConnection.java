@@ -51,10 +51,10 @@ public class ControlConnection {
         }
         // creates the Thread to listen from the server 
         new ListenFromServer().start();
-        
-        sendMessage("Client controls connected to the car.");
+
+        sendCoordinates(new Coordinates(0, 0, 0, "Client controls connected to the car."));
         isConnected = true;
-        
+
         // success we inform the caller that it worked
         return true;
     }
@@ -67,16 +67,14 @@ public class ControlConnection {
         }
     }
 
-    
-    public void sendMessage(String str){
+    public void sendMessage(String str) {
         try {
             sOutput.writeObject(str);
         } catch (IOException e) {
             carGUI.display("The client controls are no longer connected to the car. " + e);
         }
     }
-    
-    
+
     /*
      * When something goes wrong
      * Close the Input/Output streams and disconnect not much to do in the catch clause
@@ -109,7 +107,7 @@ public class ControlConnection {
         @Override
         public void run() {
             while (true) {
-                try {                   
+                try {
                     String msg = (String) sInput.readObject();
                     // Geef het bericht door aan de GUI.
                     String time = sdf.format(new Date()) + " " + msg;
