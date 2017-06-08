@@ -83,7 +83,7 @@ public class CarGUI extends javax.swing.JFrame {
 
         connectionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Connection"));
 
-        ipText.setText("192.168.2.4");
+        ipText.setText("172.16.0.33");
 
         jLabel1.setText("IP:");
 

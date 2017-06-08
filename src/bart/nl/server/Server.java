@@ -172,14 +172,10 @@ public class Server {
                     display(coordinates.getMessage());
                 }
 
-//                display("Coordinates received.");
-//                writeMsg("Coordinates received.");
-//                determineCarAction(strMsg);
-//                if (carAvailable) {
-//                    initiateCarAction();
-//                } else {
-//
-//                }
+                if (carAvailable) {
+                    car.setCoordinates(coordinates);
+                }
+
             } catch (ClassCastException ex) {
                 display("Object received cannot be cast to an instance of class Coordinates. " + ex);
             } catch (IOException e) {
