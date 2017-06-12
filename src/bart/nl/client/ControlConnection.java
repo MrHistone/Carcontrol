@@ -1,6 +1,6 @@
 package bart.nl.client;
 
-import bart.nl.Defaults.Coordinates;
+import carcontrol.Defaults.Coordinates;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

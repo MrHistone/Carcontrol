@@ -1,6 +1,6 @@
 package bart.nl.client;
 
-import bart.nl.Defaults.Coordinates;
+import carcontrol.Defaults.Coordinates;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyledDocument;

@@ -1,6 +1,7 @@
 package bart.nl.client;
 
-import bart.nl.Defaults.CarAction;
+import carcontrol.Defaults.CarAction;
+
 
 /**
  * Class which is used to send data to the car.

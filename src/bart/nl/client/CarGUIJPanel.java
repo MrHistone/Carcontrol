@@ -1,6 +1,6 @@
 package bart.nl.client;
 
-import bart.nl.Defaults;
+import carcontrol.Defaults;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
