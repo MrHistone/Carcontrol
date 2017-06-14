@@ -104,7 +104,7 @@ public class CarGUIJPanel extends JPanel {
     private class MoveCircleSlowlyToCentre implements Runnable {
 
         private final int step = 3;
-        private final int delay = 20;
+        private final int delay = 350;
 
         @Override
         public void run() {

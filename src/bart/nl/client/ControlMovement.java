@@ -1,5 +1,6 @@
 package bart.nl.client;
 
+import bart.nl.client.nice.CarPlusFrame;
 import java.util.ArrayList;
 import java.util.List;
 import net.java.games.input.Component;
@@ -16,16 +17,31 @@ import net.java.games.input.EventQueue;
 public class ControlMovement {
 
     private CarGUIJPanel carGUIJPanel;
+    private CarPlusFrame carPlusFrame;
     private Controller[] controllers;
     private List<Controller> keyboards = new ArrayList<>();
     private boolean forward = false, backward = false, right = false, left = false;
     private final int speed = 3;
     private boolean isMovingToCentre = false, isClockStarted = false;
     private long timeStart;
+    private boolean objectAtRest = true;
+
+    private enum GuiType {
+        CIRCLE, CAR
+    };
+
+    private GuiType guiType;
 
     public ControlMovement(CarGUI window) {
         carGUIJPanel = window.getBoxPanel();
         carGUIJPanel.centerControl();
+        guiType = GuiType.CIRCLE;
+        attachController();
+    }
+
+    public ControlMovement(CarPlusFrame carPlusFrame) {
+        this.carPlusFrame = carPlusFrame;
+        guiType = GuiType.CAR;
         attachController();
     }
 
@@ -124,7 +140,7 @@ public class ControlMovement {
                         isClockStarted = false;
                         isMovingToCentre = false;
                     }
-                    carGUIJPanel.moveXY(0, speed * -1);
+                    moveXY(0, speed * -1);
 
                 }
 
@@ -133,7 +149,7 @@ public class ControlMovement {
                         isClockStarted = false;
                         isMovingToCentre = false;
                     }
-                    carGUIJPanel.moveXY(0, speed);
+                    moveXY(0, speed);
                 }
 
                 if (right == true) {
@@ -141,7 +157,7 @@ public class ControlMovement {
                         isClockStarted = false;
                         isMovingToCentre = false;
                     }
-                    carGUIJPanel.moveXY(speed, 0);
+                    moveXY(speed, 0);
                 }
 
                 if (left == true) {
@@ -149,18 +165,31 @@ public class ControlMovement {
                         isClockStarted = false;
                         isMovingToCentre = false;
                     }
-                    carGUIJPanel.moveXY(speed * -1, 0);
+                    moveXY(speed * -1, 0);
                 }
 
-                // If all movement is false and circle is not in the middle, 
-                // start moving the circle slowly back to the middle.
+                // If all movement is false and object is not in the resting position, 
+                // start moving the object slowly back to the resting position.
                 if (isMovingToCentre == false
                         && forward == false
                         && backward == false
                         && right == false
-                        && left == false
-                        && carGUIJPanel.circleInCentre() == false) {
-
+                        && left == false) {
+                    objectAtRest = true;
+                    switch (guiType) {
+                        case CAR:
+                            if (carPlusFrame.carInCentre() == false) {
+                                objectAtRest = false;
+                            }
+                            break;
+                        case CIRCLE:
+                            if (carGUIJPanel.circleInCentre() == false) {
+                                objectAtRest = false;
+                            }
+                            break;
+                    }
+                }
+                if (objectAtRest == false) {
                     // Go to centre after a short period of no action.
                     if (isClockStarted == false) {
                         // Start the clock
@@ -169,7 +198,7 @@ public class ControlMovement {
                     } else {
                         if ((System.currentTimeMillis() - timeStart) > 500) {
                             isMovingToCentre = true;
-                            carGUIJPanel.centerControl();
+                            centreControl();
 
                         }
                     }
@@ -182,6 +211,28 @@ public class ControlMovement {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    private void centreControl() {
+        switch (guiType) {
+            case CAR:
+                carPlusFrame.centreControl();
+                break;
+            case CIRCLE:
+                carGUIJPanel.centerControl();
+                break;
+        }
+    }
+
+    private void moveXY(int X, int Y) {
+        switch (guiType) {
+            case CAR:
+                carPlusFrame.moveXY(X, Y);
+                break;
+            case CIRCLE:
+                carGUIJPanel.moveXY(X, Y);
+                break;
         }
     }
 
