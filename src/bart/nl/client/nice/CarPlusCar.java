@@ -7,6 +7,7 @@ package bart.nl.client.nice;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -22,8 +23,12 @@ public class CarPlusCar extends javax.swing.JPanel {
     private BufferedImage car;
     private int topLeftCarX = 0;
     private int topLeftCarY = 0;
-    private AffineTransform at;
+    private AffineTransform transform;
     private boolean firstTime = true;
+    private Point position = new Point();
+    private float orientation;
+    private double angle;
+    private final double maxAngle = 45;
 
     /**
      * Creates new form CarPlusCar
@@ -32,7 +37,7 @@ public class CarPlusCar extends javax.swing.JPanel {
         initComponents();
         if (!java.beans.Beans.isDesignTime()) {
             car = LoadImage("images//car.png");
-
+            angle = 0;
         }
 
     }
@@ -45,15 +50,19 @@ public class CarPlusCar extends javax.swing.JPanel {
             firstTime = false;
             if (topLeftCarX == 0) {
                 topLeftCarX = (this.getWidth() / 2) - (car.getWidth() / 2);
+                position.x = topLeftCarX;
             }
             if (topLeftCarY == 0) {
                 topLeftCarY = (this.getHeight() / 2) - (car.getHeight() / 2);
+                position.y = topLeftCarY;
             }
-            at = AffineTransform.getTranslateInstance(topLeftCarX, topLeftCarY);
+
+            transform = AffineTransform.getTranslateInstance(topLeftCarX, topLeftCarY);
         }
 
         Graphics2D g2d = (Graphics2D) g;
-        g2d.drawImage(car, at, null);
+        g2d.drawImage(car, transform, null);
+
     }
 
     private BufferedImage LoadImage(String FileName) {
@@ -68,29 +77,75 @@ public class CarPlusCar extends javax.swing.JPanel {
     }
 
     public void moveXY(int x, int y) {
+        boolean allowRotation = false;
         if (x != 0) {
-            at.rotate(Math.toRadians(x), car.getWidth() / 2, car.getHeight() / 2);
-            repaint();
+            System.out.println("moveXY X: " + x);
+            angle += x;
+            if (x < 0 && angle > maxAngle * -1) {
+                // Rotate left
+                allowRotation = true;
+            }
+
+            if (x > 0 && angle < maxAngle) {
+                // Rotate right
+                allowRotation = true;
+            }
+            if (allowRotation) {
+                rotate(angle);
+            }
+
+//            transform.rotate(Math.toRadians(x), car.getWidth() / 2, car.getHeight() / 2);
+//            repaint();
         }
 
         if (y != 0) {
-            at.translate(0, y);
-            repaint();
+            translate(0, y);
         }
 
+//        if (y != 0) {
+//            // Unrotate and translate, then rotate again.
+//            double rot = Math.atan2(transform.getShearY(), transform.getScaleY());
+//            transform.rotate(0, car.getWidth() / 2, car.getHeight() / 2);
+//            transform.translate(0, y);
+//            transform.rotate(rot, car.getWidth() / 2, car.getHeight() / 2);
+////            at.setToTranslation(0, y);
+//            repaint();
+//        }
     }
 
     public void centreControl() {
-        System.out.println("centre control");
+//        System.out.println("centre control");
     }
 
-    
-    public boolean carInCentre(){
-        System.out.println(Math.atan2(at.getShearY(), at.getScaleY())); 
+    public boolean carInCentre() {
+//        System.out.println(Math.atan2(at.getShearY(), at.getScaleY())); 
+//        System.out.println("TranslateY: " + transform.getTranslateY());
+//        if (Math.atan2(at.getShearY(), at.getScaleY()) != 0) {
+//            return false;
+//        }
         return true;
     }
-    
-    
+
+    private void updateTransform() {
+        transform.setToIdentity();
+        transform.translate(position.x, position.y);
+        transform.rotate(orientation, car.getWidth() / 2, car.getHeight() / 2);
+        repaint();
+    }
+
+    public void rotate(double angle) {
+        System.out.println("Angle: " + angle);
+        orientation = (float) Math.toRadians(angle);
+        System.out.println("Orientation: " + orientation);
+        updateTransform();
+
+    }
+
+    public void translate(int dx, int dy) {
+        position.translate(dx, dy);
+        updateTransform();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

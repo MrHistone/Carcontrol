@@ -21,7 +21,7 @@ public class ControlMovement {
     private Controller[] controllers;
     private List<Controller> keyboards = new ArrayList<>();
     private boolean forward = false, backward = false, right = false, left = false;
-    private final int speed = 3;
+    private final int speed = 1;
     private boolean isMovingToCentre = false, isClockStarted = false;
     private long timeStart;
     private boolean objectAtRest = true;
