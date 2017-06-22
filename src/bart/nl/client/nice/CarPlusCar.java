@@ -1,10 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package bart.nl.client.nice;
 
+import carcontrol.Defaults.CarAction;
+import carcontrol.Defaults.CarStatus;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -12,12 +9,10 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
-/**
- *
- * @author Bart Jansen
- */
 public class CarPlusCar extends javax.swing.JPanel {
 
     private BufferedImage car;
@@ -29,6 +24,7 @@ public class CarPlusCar extends javax.swing.JPanel {
     private float orientation;
     private double angle;
     private final double maxAngle = 45;
+    private CarStatus carStatusCar;
 
     /**
      * Creates new form CarPlusCar
@@ -38,6 +34,11 @@ public class CarPlusCar extends javax.swing.JPanel {
         if (!java.beans.Beans.isDesignTime()) {
             car = LoadImage("images//car.png");
             angle = 0;
+            carStatusCar = new CarStatus();
+
+            Thread scanThread = new Thread(new MoveCar());
+            scanThread.setName("CarScanThread");
+            scanThread.start();
         }
 
     }
@@ -111,6 +112,68 @@ public class CarPlusCar extends javax.swing.JPanel {
 ////            at.setToTranslation(0, y);
 //            repaint();
 //        }
+    }
+
+    public void moveCarAction(CarStatus carStatus) {
+        // Compare new movement with old movement.
+        if (carStatus.isForward() == true) {
+            carStatusCar.setForward(true);
+        } else {
+            carStatusCar.setForward(false);
+        }
+
+        if (carStatus.isBackward()) {
+            carStatusCar.setBackward(true);
+        } else {
+            carStatusCar.setBackward(false);
+        }
+
+        if (carStatus.isRight()) {
+            carStatusCar.setRight(true);
+        } else {
+            carStatusCar.setRight(false);
+        }
+
+        if (carStatus.isLeft()) {
+            carStatusCar.setLeft(true);
+        } else {
+            carStatusCar.setLeft(false);
+        }
+    }
+
+    private class MoveCar implements Runnable {
+
+        public boolean keepGoing = true;
+
+        @Override
+        public void run() {
+            // Continuous scan of the CarStatus...
+            while (keepGoing) {
+                if (carStatusCar.isBackward()) {
+
+                }
+
+                if (carStatusCar.isForward()) {
+
+                }
+
+                if (carStatusCar.isRight()) {
+
+                }
+
+                if (carStatusCar.isLeft()) {
+
+                }
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(CarPlusCar.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        }
+
     }
 
     public void centreControl() {
