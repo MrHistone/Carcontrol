@@ -1,6 +1,7 @@
 package bart.nl.client;
 
 import bart.nl.client.nice.CarPlusFrame;
+import carcontrol.Defaults.CarStatus;
 import java.util.ArrayList;
 import java.util.List;
 import net.java.games.input.Component;
@@ -25,6 +26,7 @@ public class ControlMovement {
     private boolean isMovingToCentre = false, isClockStarted = false;
     private long timeStart;
     private boolean objectAtRest = true;
+    private CarStatus carStatus;
 
     private enum GuiType {
         CIRCLE, CAR
@@ -37,12 +39,14 @@ public class ControlMovement {
         carGUIJPanel.centerControl();
         guiType = GuiType.CIRCLE;
         attachController();
+        carStatus = new CarStatus();
     }
 
     public ControlMovement(CarPlusFrame carPlusFrame) {
         this.carPlusFrame = carPlusFrame;
         guiType = GuiType.CAR;
         attachController();
+        carStatus = new CarStatus();
     }
 
     public void attachController() {
@@ -92,6 +96,7 @@ public class ControlMovement {
                                     forward = false;
                                 }
                             }
+                            
                             if (key == Component.Identifier.Key.S || key == Component.Identifier.Key.DOWN) {
                                 if (value == 1.0f) {
                                     backward = true;
@@ -114,6 +119,27 @@ public class ControlMovement {
                                 }
                             }
 
+                            // Check if there is a carstatus that has to be set or cancelled. (Only if there is a change in direction.)
+                            if (carStatus.isForward() != forward){
+                                carStatus.setForward(forward);
+                                moveCarStatus();
+                            }
+                            
+                            if (carStatus.isBackward() != backward ){
+                                carStatus.setBackward(backward);
+                                moveCarStatus();
+                            }
+                            
+                            if (carStatus.isLeft() != left){
+                                carStatus.setLeft(left);
+                                moveCarStatus();
+                            }
+                            
+                            if (carStatus.isRight() != right){
+                                carStatus.setRight(right);
+                                moveCarStatus();
+                            }
+                            
                         }
 
                     }
@@ -141,7 +167,12 @@ public class ControlMovement {
                         isMovingToCentre = false;
                     }
                     moveXY(0, speed * -1);
-
+                    // New method with carstatus.
+                    // Only send data if carstatus has changed.
+                    
+                    carStatus.setForward(true);
+                } else {
+                    carStatus.setForward(false);
                 }
 
                 if (backward == true) {
@@ -150,6 +181,9 @@ public class ControlMovement {
                         isMovingToCentre = false;
                     }
                     moveXY(0, speed);
+                    carStatus.setBackward(true);
+                } else {
+                    carStatus.setBackward(false);
                 }
 
                 if (right == true) {
@@ -158,6 +192,9 @@ public class ControlMovement {
                         isMovingToCentre = false;
                     }
                     moveXY(speed, 0);
+                    carStatus.setRight(true);
+                } else {
+                    carStatus.setRight(false);
                 }
 
                 if (left == true) {
@@ -166,6 +203,9 @@ public class ControlMovement {
                         isMovingToCentre = false;
                     }
                     moveXY(speed * -1, 0);
+                    carStatus.setLeft(true);
+                } else {
+                    carStatus.setLeft(false);
                 }
 
                 // If all movement is false and object is not in the resting position, 
@@ -229,11 +269,18 @@ public class ControlMovement {
         switch (guiType) {
             case CAR:
                 carPlusFrame.moveXY(X, Y);
+                
                 break;
             case CIRCLE:
                 carGUIJPanel.moveXY(X, Y);
                 break;
         }
+    }
+    
+    private void moveCarStatus(){
+        // On of the directions in CarStatus has been changed.
+        carPlusFrame.moveCarStatus(carStatus);
+        
     }
 
 }

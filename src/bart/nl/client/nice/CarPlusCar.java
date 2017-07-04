@@ -24,7 +24,7 @@ public class CarPlusCar extends javax.swing.JPanel {
     private float orientation;
     private double angle;
     private final double maxAngle = 45;
-    private CarStatus carStatusCar;
+    private CarStatus carStatus;
 
     /**
      * Creates new form CarPlusCar
@@ -34,7 +34,7 @@ public class CarPlusCar extends javax.swing.JPanel {
         if (!java.beans.Beans.isDesignTime()) {
             car = LoadImage("images//car.png");
             angle = 0;
-            carStatusCar = new CarStatus();
+            carStatus = new CarStatus();
 
             Thread scanThread = new Thread(new MoveCar());
             scanThread.setName("CarScanThread");
@@ -80,7 +80,7 @@ public class CarPlusCar extends javax.swing.JPanel {
     public void moveXY(int x, int y) {
         boolean allowRotation = false;
         if (x != 0) {
-            System.out.println("moveXY X: " + x);
+//            System.out.println("moveXY X: " + x);
             angle += x;
             if (x < 0 && angle > maxAngle * -1) {
                 // Rotate left
@@ -95,8 +95,12 @@ public class CarPlusCar extends javax.swing.JPanel {
                 rotate(angle);
             }
 
-//            transform.rotate(Math.toRadians(x), car.getWidth() / 2, car.getHeight() / 2);
-//            repaint();
+            if (x < 0) {
+
+            } else if (x > 0) {
+
+            }
+
         }
 
         if (y != 0) {
@@ -114,31 +118,14 @@ public class CarPlusCar extends javax.swing.JPanel {
 //        }
     }
 
-    public void moveCarAction(CarStatus carStatus) {
+    public void moveCarStatus(CarStatus carStatus) {
         // Compare new movement with old movement.
-        if (carStatus.isForward() == true) {
-            carStatusCar.setForward(true);
-        } else {
-            carStatusCar.setForward(false);
-        }
+        this.carStatus = carStatus;
+        System.out.println("Forward: " + this.carStatus.isForward()
+                + "\tBackward: " + this.carStatus.isBackward()
+                + "\tLeft: " + this.carStatus.isLeft()
+                + "\tRight: " + this.carStatus.isRight());
 
-        if (carStatus.isBackward()) {
-            carStatusCar.setBackward(true);
-        } else {
-            carStatusCar.setBackward(false);
-        }
-
-        if (carStatus.isRight()) {
-            carStatusCar.setRight(true);
-        } else {
-            carStatusCar.setRight(false);
-        }
-
-        if (carStatus.isLeft()) {
-            carStatusCar.setLeft(true);
-        } else {
-            carStatusCar.setLeft(false);
-        }
     }
 
     private class MoveCar implements Runnable {
@@ -149,22 +136,7 @@ public class CarPlusCar extends javax.swing.JPanel {
         public void run() {
             // Continuous scan of the CarStatus...
             while (keepGoing) {
-                if (carStatusCar.isBackward()) {
-
-                }
-
-                if (carStatusCar.isForward()) {
-
-                }
-
-                if (carStatusCar.isRight()) {
-
-                }
-
-                if (carStatusCar.isLeft()) {
-
-                }
-
+               
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException ex) {
@@ -197,9 +169,9 @@ public class CarPlusCar extends javax.swing.JPanel {
     }
 
     public void rotate(double angle) {
-        System.out.println("Angle: " + angle);
+//        System.out.println("Angle: " + angle);
         orientation = (float) Math.toRadians(angle);
-        System.out.println("Orientation: " + orientation);
+//        System.out.println("Orientation: " + orientation);
         updateTransform();
 
     }

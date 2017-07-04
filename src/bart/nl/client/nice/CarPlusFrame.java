@@ -5,6 +5,8 @@
  */
 package bart.nl.client.nice;
 
+import carcontrol.Defaults.CarStatus;
+
 /**
  *
  * @author Bart Jansen
@@ -121,6 +123,9 @@ public class CarPlusFrame extends javax.swing.JFrame {
         return carPlusCar.carInCentre();
     }
     
+    public void moveCarStatus(CarStatus carStatus){
+        carPlusCar.moveCarStatus(carStatus);
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private bart.nl.client.nice.CarPlusCar carPlusCar;
