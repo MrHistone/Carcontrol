@@ -119,7 +119,8 @@ public class ControlMovement {
                                 }
                             }
 
-                            // Check if there is a carstatus that has to be set or cancelled. (Only if there is a change in direction.)
+                            // Check if there is a carstatus that has to be set or cancelled. 
+                            // (Only if there is a change in direction do we call the move method.)
                             if (carStatus.isForward() != forward){
                                 carStatus.setForward(forward);
                                 moveCarStatus();
@@ -278,7 +279,7 @@ public class ControlMovement {
     }
     
     private void moveCarStatus(){
-        // On of the directions in CarStatus has been changed.
+        // One of the directions in CarStatus has been changed.
         carPlusFrame.moveCarStatus(carStatus);
         
     }

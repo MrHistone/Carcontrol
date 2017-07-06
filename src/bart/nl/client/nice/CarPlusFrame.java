@@ -112,7 +112,7 @@ public class CarPlusFrame extends javax.swing.JFrame {
     }
 
     public void moveXY(int X, int Y){
-        carPlusCar.moveXY(X, Y);
+//        carPlusCar.moveXY(X, Y);
     }
     
     public void centreControl(){

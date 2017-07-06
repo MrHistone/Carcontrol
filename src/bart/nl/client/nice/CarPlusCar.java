@@ -1,6 +1,5 @@
 package bart.nl.client.nice;
 
-import carcontrol.Defaults.CarAction;
 import carcontrol.Defaults.CarStatus;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -24,6 +23,7 @@ public class CarPlusCar extends javax.swing.JPanel {
     private float orientation;
     private double angle;
     private final double maxAngle = 45;
+    private final int maxVerticalMovement = 75;
     private CarStatus carStatus;
 
     /**
@@ -78,9 +78,10 @@ public class CarPlusCar extends javax.swing.JPanel {
     }
 
     public void moveXY(int x, int y) {
+        System.out.println("moveXY");
         boolean allowRotation = false;
         if (x != 0) {
-//            System.out.println("moveXY X: " + x);
+            System.out.println("moveXY X: " + x);
             angle += x;
             if (x < 0 && angle > maxAngle * -1) {
                 // Rotate left
@@ -119,12 +120,12 @@ public class CarPlusCar extends javax.swing.JPanel {
     }
 
     public void moveCarStatus(CarStatus carStatus) {
-        // Compare new movement with old movement.
+        // The movement has been changed.
         this.carStatus = carStatus;
-        System.out.println("Forward: " + this.carStatus.isForward()
-                + "\tBackward: " + this.carStatus.isBackward()
-                + "\tLeft: " + this.carStatus.isLeft()
-                + "\tRight: " + this.carStatus.isRight());
+//        System.out.println("Forward: " + this.carStatus.isForward()
+//                + "\tBackward: " + this.carStatus.isBackward()
+//                + "\tLeft: " + this.carStatus.isLeft()
+//                + "\tRight: " + this.carStatus.isRight());
 
     }
 
@@ -136,29 +137,57 @@ public class CarPlusCar extends javax.swing.JPanel {
         public void run() {
             // Continuous scan of the CarStatus...
             while (keepGoing) {
-               
+                if (carStatus.isBackward() == true) {
+                    if ((topLeftCarY + maxVerticalMovement) > position.y) {
+                        translate(0, 1);
+                    }
+                }
+
+                if (carStatus.isForward() == true) {
+                    if ((topLeftCarY - maxVerticalMovement) < position.y) {
+                        translate(0, -1);
+                    }
+                }
+
+                if (carStatus.isRight() == true) {
+                    angle += 1;
+                    if (angle <= maxAngle) {
+                        rotate(angle);
+                    } else {
+                        angle -= 1;
+                    }
+
+                }
+                if (carStatus.isLeft() == true) {
+                    angle -= 1;
+                    if (angle >= -maxAngle) {
+                        rotate(angle);
+                    } else {
+                        angle += 1;
+                    }
+                }
+
+                // Sleep is needed, otherwise it doesn't work.
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(2);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(CarPlusCar.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
         }
-
     }
 
     public void centreControl() {
-//        System.out.println("centre control");
+        System.out.println("Centre the car");
     }
 
     public boolean carInCentre() {
-//        System.out.println(Math.atan2(at.getShearY(), at.getScaleY())); 
-//        System.out.println("TranslateY: " + transform.getTranslateY());
-//        if (Math.atan2(at.getShearY(), at.getScaleY()) != 0) {
-//            return false;
-//        }
-        return true;
+        if (angle == 0 && position.y == topLeftCarY){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void updateTransform() {
