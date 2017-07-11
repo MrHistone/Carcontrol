@@ -25,6 +25,7 @@ public class CarPlusCar extends javax.swing.JPanel {
     private final double maxAngle = 45;
     private final int maxVerticalMovement = 75;
     private CarStatus carStatus;
+    private boolean continueMotionToCentre = true;
 
     /**
      * Creates new form CarPlusCar
@@ -141,12 +142,14 @@ public class CarPlusCar extends javax.swing.JPanel {
                     if ((topLeftCarY + maxVerticalMovement) > position.y) {
                         translate(0, 1);
                     }
+                    checkMotionBoolean();
                 }
 
                 if (carStatus.isForward() == true) {
                     if ((topLeftCarY - maxVerticalMovement) < position.y) {
                         translate(0, -1);
                     }
+                    checkMotionBoolean();
                 }
 
                 if (carStatus.isRight() == true) {
@@ -156,7 +159,7 @@ public class CarPlusCar extends javax.swing.JPanel {
                     } else {
                         angle -= 1;
                     }
-
+                    checkMotionBoolean();
                 }
                 if (carStatus.isLeft() == true) {
                     angle -= 1;
@@ -165,6 +168,7 @@ public class CarPlusCar extends javax.swing.JPanel {
                     } else {
                         angle += 1;
                     }
+                    checkMotionBoolean();
                 }
 
                 // Sleep is needed, otherwise it doesn't work.
@@ -176,14 +180,27 @@ public class CarPlusCar extends javax.swing.JPanel {
             }
 
         }
+
+        void checkMotionBoolean() {
+            // When the car is moving to the centre but a new movement is triggered,
+            // Movement to the centre should be terminated.
+            if (continueMotionToCentre == true) {
+                continueMotionToCentre = false;
+            }
+        }
+
     }
 
     public void centreControl() {
-        System.out.println("Centre the car");
+        // Start a thread that will centre the car.
+        // If a movement is triggered again, the motion to centre should be cancelled.
+        Thread motionToCentreThread = new Thread(new StartMotionToCentre(), "MotionToCentreThread");
+        continueMotionToCentre = true;
+        motionToCentreThread.start();
     }
 
     public boolean carInCentre() {
-        if (angle == 0 && position.y == topLeftCarY){
+        if (angle == 0 && position.y == topLeftCarY) {
             return true;
         } else {
             return false;
@@ -208,6 +225,60 @@ public class CarPlusCar extends javax.swing.JPanel {
     public void translate(int dx, int dy) {
         position.translate(dx, dy);
         updateTransform();
+    }
+
+    private class StartMotionToCentre implements Runnable {
+
+        @Override
+        public void run() {
+            while (continueMotionToCentre) {
+                // Rotate to 0.
+                if (angle < 0) {
+                    angle += 1;
+                    // Angle (maybe) could become bigger than 0, then reset to 0;
+                    if (angle > 0) {
+                        angle = 0;
+                    }
+                    rotate(angle);
+                }
+                if (angle > 0) {
+                    angle -= 1;
+                    // Angle (maybe) could become less than 0, then reset to 0;
+                    if (angle < 0) {
+                        angle = 0;
+                    }
+                    rotate(angle);
+                }
+                // Move to topLeftCarY
+                if (position.y < topLeftCarY) {
+                    translate(0, 2);
+                    // Position.y could become bigger than topLeftCarY (maybe). Compensate.
+                    if (position.y > topLeftCarY) {
+                        translate(0, (position.y - topLeftCarY));
+                    }
+
+                }
+                if (position.y > topLeftCarY) {
+                    translate(0, -2);
+                    // Position.y could become less than topLeftCarY (maybe). Compensate.
+                    if (position.y < topLeftCarY) {
+                        translate(0, (topLeftCarY - position.y));
+                    }
+
+                }
+
+                if (carInCentre()) {
+                    continueMotionToCentre = false;
+                }
+
+                try {
+                    Thread.sleep(7);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(CarPlusCar.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        }
     }
 
     /**
